@@ -5,13 +5,14 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { getprofile, isAuthenticated, logout } from '../../logic/LogicStore';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { adminLogout } from '../../logic/adminLogic';
 
 function Header() {
     const [checkuser, setCheckuser] = useState(isAuthenticated())
     const [profile, setProfile] = useState(getprofile() || {});
     const location = useLocation();
     useEffect(()=>{
-        setCheckuser(isAuthenticated())   
+        setCheckuser(isAuthenticated())  
     }, [location])
   return (
     <Navbar expand="lg" className="bg-dark">
@@ -30,11 +31,18 @@ function Header() {
                 checkuser?(  <NavDropdown title={profile.username} id="basic-nav-dropdown" className='text-light'>
                   
                     <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                    <NavDropdown.Item href="/admin">Admin</NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item  onClick={logout}>
                      Logout
                     </NavDropdown.Item>
-                  </NavDropdown> ):(<a href='/login' className="btn btn-light">login</a> )
+                    <NavDropdown.Item onClick={adminLogout}>Admin Logout</NavDropdown.Item>
+
+                  </NavDropdown> ):(
+                    <div className='d-flex flex-wrap gap-3'>
+                      <a href='/login' className="btn btn-light">User login</a>
+                    <a href='/admin/login' className="btn btn-light">Admin login</a>
+                  </div> )
             }
         </Navbar.Collapse>
       </Container>
